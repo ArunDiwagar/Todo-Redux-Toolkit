@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
 
-function App() {
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addTodo, setFilter } from './features/todosSlice';
+import TodoList from './components/TodoList';
+import './styles/App.css'; 
+
+const App = () => {
+  const [inputValue, setInputValue] = useState('');
+  const dispatch = useDispatch();
+
+  const handleAddTodo = () => {
+    if (inputValue.trim()) {
+      dispatch(addTodo(inputValue));
+      setInputValue('');
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>Todo List</h1>
+      <div className="input-group">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Add a new task"
+        />
+        <button onClick={handleAddTodo}>Add</button>
+      </div>
+
+      <div className="filters">
+        <button onClick={() => dispatch(setFilter('all'))}>All</button>
+        <button onClick={() => dispatch(setFilter('completed'))}>Completed</button>
+        <button onClick={() => dispatch(setFilter('pending'))}>Pending</button>
+      </div>
+
+      <TodoList />
     </div>
   );
-}
+};
 
 export default App;
